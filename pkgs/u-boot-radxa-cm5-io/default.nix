@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2017.09";
   src = ./.;
 
-  buildInputs = [
+  nativeBuildInputs = [
     dpkg
   ];
 

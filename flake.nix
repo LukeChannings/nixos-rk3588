@@ -179,12 +179,13 @@
         sdImage-opi5pro = self.nixosConfigurations.orangepi5pro.config.system.build.sdImage;
         sdImage-rock5a = self.nixosConfigurations.rock5a.config.system.build.sdImage;
 
+        sdImage-radxa-cm5-io = self.nixosConfigurations.radxa-cm5-io.config.system.build.sdImage;
+
         sdImage-opi5-cross = self.nixosConfigurations.orangepi5-cross.config.system.build.sdImage;
         sdImage-opi5b-cross = self.nixosConfigurations.orangepi5b-cross.config.system.build.sdImage;
         sdImage-opi5plus-cross = self.nixosConfigurations.orangepi5plus-cross.config.system.build.sdImage;
         sdImage-opi5pro-cross = self.nixosConfigurations.orangepi5pro-cross.config.system.build.sdImage;
         sdImage-rock5a-cross = self.nixosConfigurations.rock5a-cross.config.system.build.sdImage;
-        sdImage-radxa-cm5-io = self.nixosConfigurations.radxa-cm5-io.config.system.build.sdImage;
         sdImage-radxa-cm5-io-cross = self.nixosConfigurations.radxa-cm5-io-cross.config.system.build.sdImage;
 
         # UEFI raw image
@@ -192,6 +193,7 @@
         rawEfiImage-opi5plus = self.nixosConfigurations.orangepi5plus-uefi.config.formats.rk3588-raw-efi;
         rawEfiImage-opi5pro = self.nixosConfigurations.orangepi5pro-uefi.config.formats.rk3588-raw-efi;
         rawEfiImage-rock5a = self.nixosConfigurations.rock5a-uefi.config.formats.rk3588-raw-efi;
+        rawEfiImage-radxa-cm5-io = self.nixosConfigurations.radxa-cm5-io-uefi.config.formats.rk3588-raw-efi;
       };
 
       devShells.fhsEnv =

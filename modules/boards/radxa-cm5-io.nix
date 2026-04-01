@@ -10,7 +10,7 @@ in {
   ];
 
   boot = {
-    kernelPackages = pkgsKernel.linuxPackagesFor (pkgsKernel.callPackage ../../pkgs/kernel/vendor.nix {});
+    kernelPackages = pkgsKernel.linuxPackagesFor rk3588.kernelPackage;
 
     # kernelParams based on Rock 5A and Armbian's extlinux.conf for CM5
     kernelParams = [

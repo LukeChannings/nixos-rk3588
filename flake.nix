@@ -101,6 +101,7 @@
               specialArgs.rk3588 = {
                 inherit nixpkgs;
                 pkgsKernel = pkgsNative;
+                kernelPackage = pkgsNative.callPackage ./pkgs/kernel/vendor.nix {};
               };
               modules = [
                 ./modules/configuration.nix
@@ -124,6 +125,7 @@
               specialArgs.rk3588 = {
                 inherit nixpkgs;
                 pkgsKernel = pkgsCross;
+                kernelPackage = pkgsCross.callPackage ./pkgs/kernel/vendor.nix {};
               };
               modules = [
                 ./modules/configuration.nix
@@ -152,6 +154,7 @@
                 rk3588 = {
                   inherit nixpkgs;
                   pkgsKernel = pkgsNative;
+                  kernelPackage = pkgsNative.callPackage ./pkgs/kernel/vendor.nix {};
                 };
                 inherit nixos-generators;
               };

@@ -40,6 +40,17 @@ in {
     "${modulesPath}/profiles/all-hardware.nix"
   ];
 
+  options.image = {
+    baseName = mkOption {
+      default = "nixos-sd-image";
+      description = lib.mdDoc ''
+        Prefix of the name of the generated image file.
+        This option mirrors the upstream sd-image.nix option and takes
+        precedence over sdImage.imageBaseName when set.
+      '';
+    };
+  };
+
   options.sdImage = {
     imageName = mkOption {
       default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
@@ -49,7 +60,7 @@ in {
     };
 
     imageBaseName = mkOption {
-      default = "nixos-sd-image";
+      default = config.image.baseName;
       description = lib.mdDoc ''
         Prefix of the name of the generated image file.
       '';

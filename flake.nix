@@ -32,7 +32,6 @@
   }: let
     # Local system's architecture, the host you are running this flake on.
     localSystem = "x86_64-linux";
-    pkgsLocal = import nixpkgs {system = localSystem;};
     # The native system of the target SBC.
     aarch64System = "aarch64-linux";
     pkgsNative = import nixpkgs {system = aarch64System;};
@@ -83,7 +82,7 @@
           };
         };
 
-        formats = {config, ...}: {
+        formats = {...}: {
           imports = [
             nixos-generators.nixosModules.all-formats
           ];
@@ -110,7 +109,7 @@
 
                 {
                   networking.hostName = name;
-                  sdImage.imageBaseName = "${name}-sd-image";
+                  image.baseName = "${name}-sd-image";
                 }
               ];
             })
@@ -133,7 +132,7 @@
 
                 {
                   networking.hostName = name;
-                  sdImage.imageBaseName = "${name}-sd-image";
+                  image.baseName = "${name}-sd-image";
 
                   # Use the cross-compilation toolchain to build the whole system.
                   nixpkgs.crossSystem.config = "aarch64-unknown-linux-gnu";

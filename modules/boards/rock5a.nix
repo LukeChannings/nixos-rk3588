@@ -2,7 +2,7 @@
 #      Rock 5 Model A Specific Configuration
 # =========================================================================
 {rk3588, ...}: let
-  pkgsKernel = rk3588.pkgsKernel;
+  inherit (rk3588) pkgsKernel;
 in {
   imports = [
     ./base.nix

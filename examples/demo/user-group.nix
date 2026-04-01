@@ -14,22 +14,24 @@ in {
   networking.hostName = hostName;
 
   # TODO Define a user account. Don't forget to update this!
-  users.users."${username}" = {
-    inherit hashedPassword;
-    isNormalUser = true;
-    home = "/home/${username}";
-    extraGroups = ["users" "wheel" "docker"];
-    openssh.authorizedKeys.keys = [
-      publickey
-    ];
-  };
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    publickey
-  ];
-
-  users.groups = {
-    "${username}" = {};
-    docker = {};
+  users = {
+    users = {
+      "${username}" = {
+        inherit hashedPassword;
+        isNormalUser = true;
+        home = "/home/${username}";
+        extraGroups = ["users" "wheel" "docker"];
+        openssh.authorizedKeys.keys = [
+          publickey
+        ];
+      };
+      root.openssh.authorizedKeys.keys = [
+        publickey
+      ];
+    };
+    groups = {
+      "${username}" = {};
+      docker = {};
+    };
   };
 }

@@ -6,8 +6,12 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { self, nixpkgs, flake-utils, ... }:
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+    ...
+  }:
     {
       ## System config, use with nixos-rebuild
       nixosConfigurations = {
@@ -23,10 +27,10 @@
           };
         };
       };
-    } // flake-utils.lib.eachDefaultSystem (system:
-    {
+    }
+    // flake-utils.lib.eachDefaultSystem (_: {
       packages = {
-        sdImage = self.nixosConfigurations.orangepi5plus.config.system.build.sdImage;
+        inherit (self.nixosConfigurations.orangepi5plus.config.system.build) sdImage;
       };
     });
 }

@@ -3,7 +3,7 @@
 
   inputs = {
     # Use the local flake for testing or remote flake for production.
-   # TODO: because this is a relative path input you will need to update the flake.lock file locally with `nix flake update nixos-rk3588`
+    # TODO: because this is a relative path input you will need to update the flake.lock file locally with `nix flake update nixos-rk3588`
     nixos-rk3588.url = "path:.."; # For local testing
     # nixos-rk3588.url = "github:ryan4yin/nixos-rk3588";  # For production
   };
@@ -69,18 +69,19 @@
 
       ## TODO: to apply locally this "opi5" must match your local host name, such as "orangepi5" or "orangepi5plus"
       opi5 = {
-        deployment.targetHost =
-          if compilationType != "local-native"
-          # TODO: you will want to change this IP to another address or host name
-          then "192.168.5.42"
-          else null;
-        deployment.targetUser =
-          if compilationType != "local-native"
-          then "root"
-          else null;
-
-        # Allow local deployment only if building locally
-        deployment.allowLocalDeployment = compilationType == "local-native";
+        deployment = {
+          targetHost =
+            if compilationType != "local-native"
+            # TODO: you will want to change this IP to another address or host name
+            then "192.168.5.42"
+            else null;
+          targetUser =
+            if compilationType != "local-native"
+            then "root"
+            else null;
+          # Allow local deployment only if building locally
+          allowLocalDeployment = compilationType == "local-native";
+        };
 
         imports = [
           # import the rk3588 module, which contains the configuration for bootloader/kernel/firmware

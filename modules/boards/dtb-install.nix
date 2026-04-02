@@ -1,10 +1,6 @@
 {
   config,
-  lib,
-  options,
   pkgs,
-  modulesPath,
-  nixos-generators,
   ...
 }: let
   extraInstallCommands = ''

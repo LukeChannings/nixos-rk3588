@@ -7,6 +7,7 @@ in {
   imports = [
     ./base.nix
     ./dtb-install.nix
+    ../hardware/compute-blade-tpm.nix
   ];
 
   boot = {

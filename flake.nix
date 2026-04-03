@@ -87,6 +87,11 @@
           };
         };
 
+        hardware = {
+          # SPI TPM (Infineon SLB9670/SLB9672) on the Compute Blade CM4 carrier board
+          compute-blade-tpm = import ./modules/hardware/compute-blade-tpm.nix;
+        };
+
         formats = {...}: {
           imports = [
             nixos-generators.nixosModules.all-formats
@@ -147,6 +152,30 @@
               ];
             }))
           self.nixosModules.boards)
+        # sdImage - mainline kernel - fully native
+        // (nixpkgs.lib.mapAttrs'
+          (name: board:
+            nixpkgs.lib.nameValuePair
+            (name + "-mainline")
+            (nixpkgs.lib.nixosSystem {
+              system = aarch64System; # native or qemu-emulated
+              specialArgs.rk3588 = {
+                inherit nixpkgs;
+                pkgsKernel = pkgsNative;
+                kernelPackage = pkgsNative.callPackage ./pkgs/kernel/mainline.nix {};
+              };
+              modules = [
+                ./modules/configuration.nix
+                board.core
+                board.sd-image
+
+                {
+                  networking.hostName = name;
+                  image.baseName = "${name}-sd-image-mainline";
+                }
+              ];
+            }))
+          self.nixosModules.boards)
         # UEFI system, boot via edk2-rk3588 - fully native
         // (nixpkgs.lib.mapAttrs'
           (name: board:
@@ -188,6 +217,14 @@
 
         sdImage-radxa-cm5-io = self.nixosConfigurations.radxa-cm5-io.config.system.build.sdImage;
         sdImage-radxa-cm5-io-lite = self.nixosConfigurations.radxa-cm5-io-lite.config.system.build.sdImage;
+
+        sdImage-opi5-mainline = self.nixosConfigurations.orangepi5-mainline.config.system.build.sdImage;
+        sdImage-opi5b-mainline = self.nixosConfigurations.orangepi5b-mainline.config.system.build.sdImage;
+        sdImage-opi5plus-mainline = self.nixosConfigurations.orangepi5plus-mainline.config.system.build.sdImage;
+        sdImage-opi5pro-mainline = self.nixosConfigurations.orangepi5pro-mainline.config.system.build.sdImage;
+        sdImage-rock5a-mainline = self.nixosConfigurations.rock5a-mainline.config.system.build.sdImage;
+        sdImage-radxa-cm5-io-mainline = self.nixosConfigurations.radxa-cm5-io-mainline.config.system.build.sdImage;
+        sdImage-radxa-cm5-io-lite-mainline = self.nixosConfigurations.radxa-cm5-io-lite-mainline.config.system.build.sdImage;
 
         sdImage-opi5-cross = self.nixosConfigurations.orangepi5-cross.config.system.build.sdImage;
         sdImage-opi5b-cross = self.nixosConfigurations.orangepi5b-cross.config.system.build.sdImage;

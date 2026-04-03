@@ -21,6 +21,8 @@ _: {
         #include <dt-bindings/pinctrl/rockchip.h>
 
         / {
+          compatible = "radxa,cm5-io";
+
           fragment@0 {
             target = <&spi0>;
 
@@ -35,7 +37,7 @@ _: {
               tpm: tpm@1 {
                 compatible = "infineon,slb9670";
                 reg = <1>; /* CE1 = CM4 GPIO7 */
-                spi-max-frequency = <32000000>;
+                spi-max-frequency = <1000000>;
               };
             };
           };

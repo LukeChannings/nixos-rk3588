@@ -34,8 +34,9 @@ _: {
               /* Use SPI0_M2 mux — the set routed to the CM4 header */
               pinctrl-0 = <&spi0m2_cs1 &spi0m2_pins>;
 
-              tpm: tpm@1 {
-                compatible = "infineon,slb9670";
+              /* DIAGNOSTIC: spidev for raw SPI testing — replace with infineon,slb9670 when done */
+              tpm: spidev@1 {
+                compatible = "rockchip,spidev";
                 reg = <1>; /* CE1 = CM4 GPIO7 */
                 spi-max-frequency = <1000000>;
               };

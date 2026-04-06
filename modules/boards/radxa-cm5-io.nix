@@ -42,8 +42,8 @@ in {
 
   hardware = {
     deviceTree = {
-      # https://github.com/armbian/linux-rockchip/blob/rk-6.1-rkr5.1/arch/arm64/boot/dts/rockchip/rk3588s-radxa-cm5-io.dts
-      name = "rockchip/rk3588s-radxa-cm5-io.dtb";
+      # https://github.com/armbian/linux-rockchip/blob/rk-6.1-rkr5.1/arch/arm64/boot/dts/rockchip/rk3588s-radxa-cm5-rpi-cm4-io.dts
+      name = "rockchip/rk3588s-radxa-cm5-rpi-cm4-io.dtb";
       overlays = [];
     };
 

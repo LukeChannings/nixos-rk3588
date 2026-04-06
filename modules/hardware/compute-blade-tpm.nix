@@ -9,7 +9,9 @@
 #
 # Equivalent to the Raspberry Pi `tpm-slb9670` dtoverlay + `spi=on` base-dt-param.
 _: {
-  boot.kernelModules = ["tpm_tis_spi"];
+  boot.kernelModules = [
+    "tpm_tis_spi"
+  ];
 
   # systemd's tpm2 initrd module adds tpm-crb to availableKernelModules for
   # all aarch64 targets. That driver requires CONFIG_ACPI which this vendor
@@ -18,7 +20,7 @@ _: {
 
   hardware.deviceTree.overlays = [
     {
-      name = "rk3588s-compute-blade-tpm";
+      name = "rk3588-spi0-tpm-cs1";
       dtsText = ''
         /dts-v1/;
         /plugin/;
@@ -26,7 +28,7 @@ _: {
         #include <dt-bindings/pinctrl/rockchip.h>
 
         / {
-          compatible = "radxa,cm5-io";
+          compatible = "radxa,cm5-rpi-cm4-io";
 
           fragment@0 {
             target = <&spi0>;
@@ -50,6 +52,52 @@ _: {
       '';
     }
   ];
+
+  # hardware.deviceTree.overlays = [
+  #   {
+  #     name = "rk3588-spi0-tpm-cs1";
+  #     dtsText = ''
+  #       /dts-v1/;
+  #       /plugin/;
+
+  #       #include <dt-bindings/pinctrl/rockchip.h>
+
+  #       / {
+  #         fragment@0 {
+  #           target = <&spi0>;
+  #           __overlay__ {
+  #             status = "okay";
+  #           };
+  #         };
+
+  #         fragment@1 {
+  #           target = <&spidev1>;
+  #           __overlay__ {
+  #             status = "disabled";
+  #           };
+  #         };
+
+  #         fragment@2 {
+  #           target = <&spi0>;
+  #           __overlay__ {
+  #             /* needed to avoid dtc warning */
+  #             #address-cells = <1>;
+  #             #size-cells = <0>;
+  #             slb9670: slb9670@1 {
+  #               compatible = "infineon,slb9670";
+  #               reg = <1>;	/* CE1 */
+  #               #address-cells = <1>;
+  #               #size-cells = <0>;
+  #               spi-max-frequency = <32000000>;
+  #               status = "okay";
+  #             };
+
+  #           };
+  #         };
+  #       };
+  #     '';
+  #   }
+  # ];
 
   security.tpm2 = {
     enable = true;

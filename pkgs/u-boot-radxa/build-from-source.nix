@@ -1,11 +1,10 @@
 # TODO not working yet!
 {
-  lib,
   buildUBoot,
   fetchFromGitHub,
   rkbin-rk3588,
 }:
-(buildUBoot rec {
+(buildUBoot {
   version = "2023.08.27";
 
   # https://github.com/radxa/u-boot/tree/stable-5.10-rock5

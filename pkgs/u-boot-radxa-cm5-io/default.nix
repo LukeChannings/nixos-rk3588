@@ -3,7 +3,7 @@
   dpkg,
   ...
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "linux-u-boot-radxa-cm5-io-vendor";
   version = "2017.09";
   src = ./.;

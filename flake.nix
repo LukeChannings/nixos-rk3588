@@ -44,11 +44,6 @@
   in
     {
       nixosModules = {
-        orangepi5plus = throw "'nixosModules.orangepi5plus' has been renamed to 'nixosModules.boards.orangepi5plus'";
-        orangepi5b = throw "'nixosModules.orangepi5b' has been renamed to 'nixosModules.boards.orangepi5b'";
-        orangepi5 = throw "'nixosModules.orangepi5' has been renamed to 'nixosModules.boards.orangepi5'";
-        rock5a = throw "'nixosModules.rock5a' has been renamed to 'nixosModules.boards.rock5a'";
-
         boards = {
           # Orange Pi 5 SBC
           orangepi5 = {
@@ -152,30 +147,6 @@
               ];
             }))
           self.nixosModules.boards)
-        # sdImage - mainline kernel - fully native
-        // (nixpkgs.lib.mapAttrs'
-          (name: board:
-            nixpkgs.lib.nameValuePair
-            (name + "-mainline")
-            (nixpkgs.lib.nixosSystem {
-              system = aarch64System; # native or qemu-emulated
-              specialArgs.rk3588 = {
-                inherit nixpkgs;
-                pkgsKernel = pkgsNative;
-                kernelPackage = pkgsNative.callPackage ./pkgs/kernel/mainline.nix {};
-              };
-              modules = [
-                ./modules/configuration.nix
-                board.core
-                board.sd-image
-
-                {
-                  networking.hostName = name;
-                  image.baseName = "${name}-sd-image-mainline";
-                }
-              ];
-            }))
-          self.nixosModules.boards)
         # UEFI system, boot via edk2-rk3588 - fully native
         // (nixpkgs.lib.mapAttrs'
           (name: board:
@@ -207,7 +178,7 @@
     // flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
     in {
-      packages = {
+      packages = let rkbin-rk3588 = pkgs.callPackage ./pkgs/rkbin-rk3588 {}; in {
         # sdImage
         sdImage-opi5 = self.nixosConfigurations.orangepi5.config.system.build.sdImage;
         sdImage-opi5b = self.nixosConfigurations.orangepi5b.config.system.build.sdImage;
@@ -241,6 +212,12 @@
         rawEfiImage-rock5a = self.nixosConfigurations.rock5a-uefi.config.formats.rk3588-raw-efi;
         rawEfiImage-radxa-cm5-io = self.nixosConfigurations.radxa-cm5-io-uefi.config.formats.rk3588-raw-efi;
         rawEfiImage-radxa-cm5-io-lite = self.nixosConfigurations.radxa-cm5-io-lite-uefi.config.formats.rk3588-raw-efi;
+
+        uboot.radxa-cm5-io = pkgs.callPackage ./pkgs/u-boot-radxa-cm5-io/build-from-source.nix {
+          inherit rkbin-rk3588;
+        };
+
+        inherit rkbin-rk3588;
       };
 
       devShells.fhsEnv =

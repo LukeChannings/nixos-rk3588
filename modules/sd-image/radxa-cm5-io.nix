@@ -6,7 +6,7 @@
   ...
 }: let
   rootPartitionUUID = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
-  uboot = pkgs.callPackage ../../pkgs/u-boot-radxa-cm5-io {};
+  uboot = pkgs.callPackage ../../pkgs/u-boot-radxa-cm5-io/build-from-source.nix {};
 in {
   imports = [
     "${rk3588.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"

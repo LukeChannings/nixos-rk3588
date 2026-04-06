@@ -59,6 +59,7 @@ in
         cp ${./rk3582-radxa-cm5-io.dts} arch/arm64/boot/dts/rockchip/rk3582-radxa-cm5-io.dts
         sed -i 's/rk3588s-radxa-cm5-io\.dtb/rk3588s-radxa-cm5-io.dtb \\\n\trk3582-radxa-cm5-io.dtb/' \
           arch/arm64/boot/dts/rockchip/Makefile
+
       ''
       + "\n"
       + old.postPatch;

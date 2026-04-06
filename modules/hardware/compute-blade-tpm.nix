@@ -11,6 +11,11 @@
 _: {
   boot.kernelModules = ["tpm_tis_spi"];
 
+  # systemd's tpm2 initrd module adds tpm-crb to availableKernelModules for
+  # all aarch64 targets. That driver requires CONFIG_ACPI which this vendor
+  # kernel lacks. The SPI TPM is handled by tpm_tis_spi instead.
+  boot.initrd.allowMissingModules = true;
+
   hardware.deviceTree.overlays = [
     {
       name = "rk3588s-compute-blade-tpm";

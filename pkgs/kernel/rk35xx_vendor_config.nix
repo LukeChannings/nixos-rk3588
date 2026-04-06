@@ -2213,6 +2213,9 @@
   CONFIG_TCG_TPM = "y";
   CONFIG_HW_RANDOM_TPM = "y";
   CONFIG_TCG_TIS_SPI = "m";
+  # CONFIG_TCG_CRB is not set — this is an ACPI-based driver (UEFI/x86 PC TPMs)
+  # that requires ACPI structures unavailable in the RK3588 vendor kernel.
+  # The Compute Blade uses a SPI TPM (tpm_tis_spi), not CRB.
   CONFIG_TCG_TIS_I2C_INFINEON = "y";
   CONFIG_I2C = "y";
   CONFIG_I2C_BOARDINFO = "y";

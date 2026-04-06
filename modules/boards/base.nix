@@ -9,7 +9,7 @@
     powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
     boot = {
-      supportedFilesystems = lib.mkForce [
+      supportedFilesystems = lib.mkDefault [
         "vfat"
         "fat32"
         "exfat"
@@ -38,7 +38,7 @@
       #   ```
       #    $ grep -r 'availableKernelModules' ./nixpkgs/
       #   ```
-      initrd.availableKernelModules = lib.mkForce [
+      initrd.availableKernelModules = lib.mkDefault [
         # NVMe
         "nvme"
 

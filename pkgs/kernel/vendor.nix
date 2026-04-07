@@ -53,13 +53,6 @@ in
       ''
         sed -i "drivers/gpu/arm/bifrost/csf/mali_kbase_csf_firmware.c" \
           -e "s:drivers/gpu/arm/bifrost/mali_csffw.bin:$src/drivers/gpu/arm/bifrost/mali_csffw.bin:"
-
-        # Inject CM5 Lite (RK3582) DTS and register it in the Makefile.
-        # RK3582 is a stripped-down RK3588S variant without Mali GPU.
-        cp ${./rk3582-radxa-cm5-io.dts} arch/arm64/boot/dts/rockchip/rk3582-radxa-cm5-io.dts
-        sed -i 's/rk3588s-radxa-cm5-io\.dtb/rk3588s-radxa-cm5-io.dtb \\\n\trk3582-radxa-cm5-io.dtb/' \
-          arch/arm64/boot/dts/rockchip/Makefile
-
       ''
       + "\n"
       + old.postPatch;

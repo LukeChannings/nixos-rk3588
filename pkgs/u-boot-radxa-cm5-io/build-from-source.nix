@@ -1,4 +1,3 @@
-# TODO not working yet!
 {
   buildUBoot,
   fetchFromGitHub,
@@ -18,7 +17,7 @@
   # https://github.com/radxa/u-boot/blob/next-dev-v2026.01/configs/radxa-cm5-rpi-cm4-io-rk3588s_defconfig
   defconfig = "radxa-cm5-rpi-cm4-io-rk3588s_defconfig";
 
-  extraMeta.platforms = ["aarch64-linux"];
+  extraMeta.platforms = [ "aarch64-linux" ];
   BL31 = "${rkbin-rk3588}/rk3588_bl31_v1.51.elf";
 
   buildPhase = ''
@@ -36,10 +35,10 @@
     "u-boot.itb"
     "idbloader.img"
   ];
-})
-.overrideAttrs (oldAttrs: {
-  patches = []; # remove all patches, which is not compatible with thead-u-boot
-  postPatch = (oldAttrs.postPatch or "") + ''
-    patchShebangs --build arch/arm/mach-rockchip/make_fit_atf.sh arch/arm/mach-rockchip/decode_bl31.py
-  '';
-})
+}).overrideAttrs
+  (oldAttrs: {
+    patches = [ ]; # remove all patches, which is not compatible with thead-u-boot
+    postPatch = (oldAttrs.postPatch or "") + ''
+      patchShebangs --build arch/arm/mach-rockchip/make_fit_atf.sh arch/arm/mach-rockchip/decode_bl31.py
+    '';
+  })

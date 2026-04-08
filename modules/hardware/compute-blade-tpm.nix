@@ -27,7 +27,8 @@ _: {
 
   hardware.deviceTree.overlays = [
     {
-      name = "rk3588-spi0-tpm";
+      name = "rk3588-spi0-tpm-cs1";
+      # https://github.com/Joshua-Riek/ubuntu-rockchip/issues/1314
       dtsText = ''
         /dts-v1/;
         /plugin/;
@@ -40,25 +41,18 @@ _: {
 
           fragment@0 {
             target = <&spi0>;
+
             __overlay__ {
               status = "okay";
               #address-cells = <1>;
               #size-cells = <0>;
-              /* "default" and "high_speed" both point to spi0m2_pins.
-               * The rockchip SPI driver calls pinctrl_select_state() for
-               * "high_speed" during every transfer above 24 MHz, which is
-               * the only path that actually writes the mux to hardware on
-               * this vendor kernel (6.1). Without this, dev->pins is NULL
-               * at probe time and the pins stay in GPIO mode. */
-              pinctrl-names = "default", "high_speed";
-              pinctrl-0 = <&spi0m2_pins>;
-              pinctrl-1 = <&spi0m2_pins>;
-              num-cs = <1>;
-              cs-gpios = <&gpio1 RK_PB5 GPIO_ACTIVE_LOW>;
+              pinctrl-names = "default";
+              pinctrl-0 = <&spi0m2_cs1 &spi0m2_pins>;
 
-              tpm@0 {
+              tpm@1 {
                 compatible = "infineon,slb9670";
-                reg = <0>;
+                status = "okay";
+                reg = <1>;
                 spi-max-frequency = <18500000>;
               };
             };

@@ -79,8 +79,31 @@ Here is an example configuration that you can use as a starting point: [Demo - D
 
 The demo above uses Colmena with remote deployments.
 If you want something more basic, just create a [regular system config with flakes](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/nixos-with-flakes-enabled)
-  and import `nixos-rk3588.nixosModules.${board}` as well as `nixos-rk3588.nixosModules.${board}.sd-image`
+  and import `nixos-rk3588.nixosModules.${board}` as well as `nixos-rk3588.nixosModules.${board}-sd-image`
   modules provided by this flake.
+
+## Building
+
+Common operations go through [`just`](https://just.systems/man/); run `just` to list them.
+The dev shell (`nix-shell`, or `direnv allow`) provides every tool they need.
+
+| Command             | What it does                                                               |
+| ------------------- | -------------------------------------------------------------------------- |
+| `just build <attr>` | Build one package, e.g. `just build sdImage-opi5`                           |
+| `just build-all`    | Build every package for the current system                                  |
+| `just test`         | Evaluate every NixOS configuration (cheap; catches broken boards)           |
+| `just lint`         | Check formatting (alejandra, deadnix, statix, yamllint, actionlint)         |
+| `just format`       | Format the tree                                                             |
+
+There is deliberately no default package: the images are board-specific, so
+always name one. Native images (`sdImage-*`, `rawEfiImage-*`) are built on
+`aarch64-linux`; the cross-compiled ones (`sdImage-*-cross`) on `x86_64-linux`.
+
+Most images use the Armbian vendor kernel. Boards with an upstream device tree
+also get a `-mainline` variant built against nixpkgs' latest kernel —
+`sdImage-opi5-mainline`, `sdImage-opi5b-mainline`, `sdImage-opi5plus-mainline`
+and `sdImage-rock5a-mainline`. The Orange Pi 5 Pro and both Radxa CM5 boards
+have no mainline device tree, so they are vendor-kernel only.
 
 ## How this flake works
 

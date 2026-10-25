@@ -1,0 +1,7 @@
+# ./default.nix must take `{ ... }:` rather than `_:`, because `nix-build -A`
+# only auto-calls a function whose argument is an attribute-set pattern.
+#
+# treefmt runs statix with its own generated config, so this disable is
+# mirrored by `programs.statix.disabled-lints` in treefmt.nix. This file is
+# what the pre-commit hook (which runs `statix check`) reads.
+disabled = ["empty_pattern"]

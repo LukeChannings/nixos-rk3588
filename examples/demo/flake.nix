@@ -12,6 +12,7 @@
     inherit (nixos-rk3588.inputs) nixpkgs;
     # TODO: choose your rk3588 SBC model
     boardModule = nixos-rk3588.nixosModules.orangepi5;
+    boardSdImageModule = nixos-rk3588.nixosModules.orangepi5-sd-image;
 
     # Define system architecture and different compilation options.
     bootType = "uefi"; # Change to "u-boot" for U-Boot
@@ -54,7 +55,7 @@
       }
       else
         # U-Boot configuration using sd-image
-        boardModule.sd-image;
+        boardSdImageModule;
   in {
     colmena = {
       meta = {
@@ -85,7 +86,7 @@
 
         imports = [
           # import the rk3588 module, which contains the configuration for bootloader/kernel/firmware
-          boardModule.core
+          boardModule
 
           # Import the correct bootloader based on the selected bootType.
           bootloaderModule

@@ -62,6 +62,5 @@ in {
       # places the U-Boot image at block first at block 64 (0x40)
       dd if=${uboot}/u-boot.bin of=$img seek=64 conv=notrunc
     '';
-
   };
 }

@@ -1,5 +1,10 @@
-{nixpkgs, lib, config, pkgs, ...}:
-let
+{
+  nixpkgs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
   # Feel free to change the UUID, maybe even generate one randomly. We use
   # hardcoded UUID so that the kernel may always find the root partition, no
   # matter if it's on SD card, NVMe or USB stick.

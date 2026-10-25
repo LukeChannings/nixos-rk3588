@@ -38,6 +38,6 @@
     "idbloader.img"
   ];
 })
-.overrideAttrs (oldAttrs: {
+.overrideAttrs (_oldAttrs: {
   patches = []; # remove all patches, which is not compatible with thead-u-boot
 })

@@ -100,10 +100,22 @@ always name one. Native images (`sdImage-*`, `rawEfiImage-*`) are built on
 `aarch64-linux`; the cross-compiled ones (`sdImage-*-cross`) on `x86_64-linux`.
 
 Most images use the Armbian vendor kernel. Boards with an upstream device tree
-also get a `-mainline` variant built against nixpkgs' latest kernel —
+also get a `-mainline` variant built against the upstream kernel —
 `sdImage-opi5-mainline`, `sdImage-opi5b-mainline`, `sdImage-opi5plus-mainline`
-and `sdImage-rock5a-mainline`. The Orange Pi 5 Pro and both Radxa CM5 boards
-have no mainline device tree, so they are vendor-kernel only.
+and `sdImage-rock5a-mainline`.
+
+That kernel is pinned to 7.2 rather than following `linuxPackages_latest`,
+because no OpenZFS release yet supports 7.3 and nixpkgs enables ZFS by
+default. The pin also keeps the Orange Pi 5 Pro off the mainline list, as its
+device tree only landed in 7.3. Both constraints lift together; see
+`pkgs/kernel/mainline.nix`.
+
+Both Radxa CM5 boards are vendor-kernel only. The CM5 Lite (RK3582) has no
+mainline device tree at all; the CM5 has one upstream (`rk3588s-radxa-cm5-io`)
+but under a different name than the Armbian tree this repo targets
+(`rk3588s-radxa-cm5-rpi-cm4-io`), so it needs a device-tree override and
+hardware verification before it can be enabled. See `mainlineBoards` in
+`flake.nix`.
 
 ## How this flake works
 

@@ -2,7 +2,7 @@
   description = "A minimal NixOS configuration for the RK3588/RK3588S based SBCs";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -63,18 +63,30 @@
     mainlineKernel = pkgs: pkgs.callPackage ./pkgs/kernel/mainline.nix {};
 
     # Boards with an upstream device tree, and so a usable mainline kernel.
-    # Checked against arch/arm64/boot/dts/rockchip in Linux v6.19, which is
-    # what nixpkgs' linuxPackages_latest currently tracks:
+    # Checked against arch/arm64/boot/dts/rockchip in Linux v7.2, which is
+    # what pkgs/kernel/mainline.nix is pinned to (see the note there):
     #
     #   orangepi5        rk3588s-orangepi-5.dts
     #   orangepi5b       rk3588s-orangepi-5b.dts
     #   orangepi5plus    rk3588-orangepi-5-plus.dts
     #   rock5a           rk3588s-rock-5a.dts
     #
-    # The other three boards are vendor-kernel only: rk3588s-orangepi-5-pro,
-    # rk3588s-radxa-cm5-rpi-cm4-io and rk3582-radxa-cm5-io exist solely in
-    # armbian/linux-rockchip. Mainline carries rk3582-radxa-e52c, but that is
-    # a different board. Feature-level status per SoC and board:
+    # Each matches the DTB name its board module already sets, so the mainline
+    # variants need no device-tree override.
+    #
+    # orangepi5pro is absent only because of the pin: rk3588s-orangepi-5-pro.dts
+    # landed in 7.3. Add it when mainline.nix moves past 7.2.
+    #
+    # radxa-cm5-io is absent for a different reason. Mainline does carry
+    # rk3588s-radxa-cm5-io, but the board module uses Armbian's
+    # rk3588s-radxa-cm5-rpi-cm4-io, which names a different carrier. Enabling
+    # it needs a device-tree override and confirmation that the two describe
+    # the same hardware - relevant here, where the CM5 sits on a Compute Blade.
+    #
+    # radxa-cm5-io-lite (RK3582) has no mainline device tree at all; mainline
+    # carries rk3582-radxa-e52c, a different board.
+    #
+    # Feature-level status per SoC and board:
     #   https://gitlab.collabora.com/hardware-enablement/rockchip-3588/notes-for-rockchip-3588/-/blob/main/mainline-status.md
     mainlineBoards = [
       "orangepi5"

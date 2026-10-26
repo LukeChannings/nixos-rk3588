@@ -29,8 +29,11 @@
     # Kept for compatibility with the existing pre-commit workflow. treefmt
     # (see ./treefmt.nix and `just lint`) runs the same Nix tools and is what
     # CI checks; this only backs the git hook.
+    #
+    # Upstream renamed pre-commit-hooks.nix to git-hooks.nix; the input keeps
+    # its old name because that is what the hook is still called here.
     pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+      url = "github:cachix/git-hooks.nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-compat.follows = "";

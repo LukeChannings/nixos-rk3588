@@ -1,0 +1,40 @@
+---
+name: Build
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# Only the small aarch64 artefacts are built here. The sd-image and raw-EFI
+# packages are multi-gigabyte and the kernels take the better part of an hour,
+# neither of which fits a hosted runner; `just test` already evaluates every
+# configuration, which is what catches breakage. There is no packages.default,
+# so each attribute is named explicitly.
+jobs:
+  build:
+    name: Build ${{ matrix.attr }}
+    # The packages below exist only in packages.aarch64-linux.
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        attr:
+          - rkbin-rk3588
+          - uboot-radxa-cm5-io
+    steps:
+      # yamllint disable-line rule:line-length
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      # yamllint disable-line rule:line-length
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa  # v23
+        with:
+          determinate: false
+      - uses: lukechannings/nixham/.forgejo/actions/substituter@main
+      - uses: lukechannings/nixham/.forgejo/actions/setup-nix-shell@main
+      - name: Build
+        run: just build ${{ matrix.attr }}

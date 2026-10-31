@@ -36,11 +36,27 @@
     "idbloader.img"
   ];
 }).overrideAttrs
-(oldAttrs: {
+(_oldAttrs: {
   patches = []; # remove all patches, which is not compatible with thead-u-boot
-  postPatch =
-    (oldAttrs.postPatch or "")
-    + ''
-      patchShebangs --build arch/arm/mach-rockchip/make_fit_atf.sh arch/arm/mach-rockchip/decode_bl31.py
-    '';
+
+  # Replaced wholesale rather than appended to. nixpkgs' buildUBoot ends its
+  # postPatch with a dtc 1.8 workaround that rewrites -Wno-graph_child_address
+  # to -Eno-node_name_not_empty in scripts/Makefile.lib and
+  # dts/upstream/Makefile, using --replace-fail. This fork carries that flag
+  # in neither file (and has no dts/upstream at all), so the substitution
+  # aborts the build before a single object is compiled.
+  #
+  # Nothing else in the stock postPatch is lost: it otherwise only runs the
+  # two patchShebangs calls repeated below, plus a loop over
+  # pythonScriptsToInstall, which is empty here because this package does not
+  # set it.
+  #
+  # If the fork ever gains binman "@<name>-SEQ" template nodes, dtc will start
+  # rejecting them as node_name_not_empty and the upstream workaround will
+  # need reinstating against whatever file then carries DTC_FLAGS.
+  postPatch = ''
+    patchShebangs tools
+    patchShebangs scripts
+    patchShebangs --build arch/arm/mach-rockchip/make_fit_atf.sh arch/arm/mach-rockchip/decode_bl31.py
+  '';
 })

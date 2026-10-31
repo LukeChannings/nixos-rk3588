@@ -50,5 +50,13 @@ in {
     extraGroups = ["users" "wheel"];
   };
 
-  system.stateVersion = "23.11";
+  # Tracks the flake's nixpkgs rather than staying pinned at the release this
+  # file was written for. The usual rule — never move stateVersion on a live
+  # system — does not apply here: this module is reachable only through
+  # `mkBoard`, so it is the floor under a freshly flashed image, and every
+  # flash is a first install. Nothing stateful survives the bump.
+  #
+  # It is deliberately not exported via `nixosModules.<board>`; downstream
+  # consumers import the board modules and set their own stateVersion.
+  system.stateVersion = "26.11";
 }

@@ -9,6 +9,7 @@
 #
 {
   fetchFromGitHub,
+  linuxKernel,
   linuxManualConfig,
   ubootTools,
   ...
@@ -27,7 +28,12 @@ in
       hash = "sha256-gwoBFpiOqqHChgz7Y95ntCXwTtGCXbjRt7ritWW176c=";
     };
 
+    # 6.1's vendored libbpf assigns a const char * from strchr() to a char *,
+    # which a C23 host compiler rejects under the -Werror that
+    # tools/bpf/resolve_btfids builds it with. nixpkgs carries the one-line
+    # fix for its own linux_6_1.
     kernelPatches = [
+      linuxKernel.kernelPatches.libbpf_C23_compat
     ];
 
     # Steps to the generated kernel config file
